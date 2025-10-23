@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Enhanced Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #2c3e50; color: white; padding: 20px; border-radius: 5px; margin-bottom: 20px; }
+        .event-item { padding: 15px; margin: 10px 0; border-radius: 5px; background: white; }
+        .threat { color: #e74c3c; }
+        .normal { color: #27ae60; }
+        .test-btn { background: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ Test Enhanced Dashboard</h1>
+            <p>Testing website threat detection features</p>
+        </div>
+        
+        <div>
+            <button class="test-btn" onclick="testAPI()">Test API</button>
+            <button class="test-btn" onclick="testDashboard()">Test Dashboard</button>
+            <button class="test-btn" onclick="showSampleData()">Show Sample Data</button>
+        </div>
+        
+        <div id="results" style="background: white; padding: 20px; border-radius: 5px; margin-top: 20px;">
+            <h2>Test Results</h2>
+            <div id="output">Click a button to test...</div>
+        </div>
+    </div>
+    
+    <script>
+        async function testAPI() {
+            const output = document.getElementById('output');
+            output.innerHTML = 'Testing API...';
+            
+            try {
+                const response = await fetch('http://localhost:8003/api/v1/events?limit=5');
+                const data = await response.json();
+                
+                output.innerHTML = `
+                    <h3>API Test Results:</h3>
+                    <p><strong>Status:</strong> ${response.status}</p>
+                    <p><strong>Events Found:</strong> ${data.length}</p>
+                    <h4>Sample Events:</h4>
+                    ${data.map(event => `
+                        <div class="event-item" style="border-left: 4px solid ${event.is_threat ? '#e74c3c' : '#27ae60'};">
+                            <strong>${event.website_name || 'Unknown'}</strong> (${event.website_domain || 'N/A'})
+                            <br>Threat: ${event.is_threat ? 'YES' : 'NO'} - ${event.threat_reason || 'N/A'}
+                            <br>Score: ${(event.threat_score * 100).toFixed(1)}%
+                        </div>
+                    `).join('')}
+                `;
+            } catch (error) {
+                output.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+        
+        async function testDashboard() {
+            const output = document.getElementById('output');
+            output.innerHTML = 'Testing Dashboard...';
+            
+            try {
+                const response = await fetch('http://localhost:8003/dashboard');
+                const html = await response.text();
+                
+                if (html.includes('website_name') && html.includes('threat_reason')) {
+                    output.innerHTML = `
+                        <h3>Dashboard Test Results:</h3>
+                        <p style="color: green;">✅ Dashboard contains enhanced features!</p>
+                        <p><strong>Status:</strong> ${response.status}</p>
+                        <p><strong>Contains website_name:</strong> ${html.includes('website_name') ? 'Yes' : 'No'}</p>
+                        <p><strong>Contains threat_reason:</strong> ${html.includes('threat_reason') ? 'Yes' : 'No'}</p>
+                        <p><a href="http://localhost:8003/dashboard" target="_blank">Open Dashboard</a></p>
+                    `;
+                } else {
+                    output.innerHTML = `
+                        <h3>Dashboard Test Results:</h3>
+                        <p style="color: red;">❌ Dashboard missing enhanced features</p>
+                        <p><strong>Status:</strong> ${response.status}</p>
+                    `;
+                }
+            } catch (error) {
+                output.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+        
+        function showSampleData() {
+            const output = document.getElementById('output');
+            output.innerHTML = `
+                <h3>Expected Enhanced Data Format:</h3>
+                <div class="event-item" style="border-left: 4px solid #e74c3c;">
+                    <strong>Fake Bank Site</strong> (phishing-bank.com)
+                    <br>Threat: YES - Phishing attempt - fake banking
+                    <br>Score: 95.2%
+                </div>
+                <div class="event-item" style="border-left: 4px solid #27ae60;">
+                    <strong>GitHub</strong> (github.com)
+                    <br>Threat: NO - Code repository platform
+                    <br>Score: 15.3%
+                </div>
+                <div class="event-item" style="border-left: 4px solid #e74c3c;">
+                    <strong>Ransomware Site</strong> (ransomware-download.net)
+                    <br>Threat: YES - Ransomware distribution
+                    <br>Score: 98.7%
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
+
+

@@ -85,10 +85,38 @@ Before installing the cybersecurity system, ensure you have:
 
 ## 📦 Installation
 
-### Clone the Repository
+### GitHub Setup
+
+#### Prerequisites for GitHub
+- **Git** installed on your system
+- **GitHub account** (create one at [github.com](https://github.com))
+- **SSH key** set up (recommended) or Personal Access Token
+
+#### SSH Key Setup (Recommended)
+1. **Generate SSH key** (if you don't have one):
+   ```bash
+   ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+   ```
+
+2. **Add SSH key to GitHub**:
+   - Copy your public key: `cat ~/.ssh/id_rsa.pub`
+   - Go to GitHub → Settings → SSH and GPG keys → New SSH key
+   - Paste your key and save
+
+3. **Test SSH connection**:
+   ```bash
+   ssh -T git@github.com
+   ```
+
+#### Clone the Repository
 ```bash
-git clone https://github.com/yourusername/cybersecurity-system.git
-cd cybersecurity-system
+# Using SSH (recommended)
+git clone git@github.com:tahanazir77/threatdetection.git
+cd threatdetection
+
+# Or using HTTPS
+git clone https://github.com/tahanazir77/threatdetection.git
+cd threatdetection
 ```
 
 ### Install Dependencies
@@ -150,7 +178,7 @@ docker run -d -p 6379:6379 redis:latest
 Copy the example environment file and configure your settings:
 
 ```bash
-cp config/env_example.txt .env
+cp .env.example .env
 ```
 
 Edit `.env` file to configure:
@@ -194,13 +222,33 @@ python main.py
 - **Performance**: http://localhost:8000/api/v1/performance
 
 ## 🧪 Testing
+
+### Local Testing
 ```bash
 # Run tests
 pytest tests/
 
 # Run with coverage
 pytest --cov=src tests/
+
+# Run specific test file
+pytest tests/test_specific.py
+
+# Run with verbose output
+pytest -v
 ```
+
+### GitHub Actions CI/CD
+This repository includes automated CI/CD pipelines:
+
+- **Automated Testing**: Runs on Python 3.8, 3.9, 3.10, 3.11
+- **Code Quality**: Linting with flake8, type checking with mypy
+- **Security Scanning**: Bandit security analysis
+- **Coverage Reports**: Code coverage tracking
+- **Docker Build**: Automated Docker image building
+- **Dependency Scanning**: Security vulnerability checks
+
+View the [Actions tab](https://github.com/tahanazir77/threatdetection/actions) to see CI/CD status.
 
 ## 🐳 Docker Support
 ```bash
@@ -242,19 +290,56 @@ docker-compose down
 
 We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
+### Fork and Contribute
+1. **Fork the repository**:
+   - Go to [https://github.com/tahanazir77/threatdetection](https://github.com/tahanazir77/threatdetection)
+   - Click the "Fork" button in the top right
+
+2. **Clone your fork**:
+   ```bash
+   git clone git@github.com:YOUR_USERNAME/threatdetection.git
+   cd threatdetection
+   ```
+
+3. **Add upstream remote**:
+   ```bash
+   git remote add upstream git@github.com:tahanazir77/threatdetection.git
+   ```
+
+4. **Create a feature branch**:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+5. **Make your changes and commit**:
+   ```bash
+   git add .
+   git commit -m "Add your feature description"
+   ```
+
+6. **Push to your fork**:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+7. **Create a Pull Request**:
+   - Go to your fork on GitHub
+   - Click "Compare & pull request"
+   - Fill out the PR template
+
 ### Development Setup
 ```bash
 # Fork and clone the repository
-git clone https://github.com/yourusername/cybersecurity-system.git
-cd cybersecurity-system
+git clone https://github.com/tahanazir77/threatdetection.git
+cd threatdetection
 
 # Create a virtual environment
 python -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install development dependencies
 pip install -r requirements.txt
-pip install -r requirements-dev.txt  # If available
+pip install -r requirements-dev.txt
 
 # Run tests
 pytest tests/
@@ -265,7 +350,7 @@ flake8 src/
 ```
 
 ### Reporting Issues
-- Use the [GitHub Issues](https://github.com/yourusername/cybersecurity-system/issues) page
+- Use the [GitHub Issues](https://github.com/tahanazir77/threatdetection/issues) page
 - Include system information and error logs
 - Provide steps to reproduce the issue
 
@@ -283,8 +368,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - **Documentation**: Check the `docs/` directory
-- **Issues**: [GitHub Issues](https://github.com/yourusername/cybersecurity-system/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/cybersecurity-system/discussions)
+- **Issues**: [GitHub Issues](https://github.com/tahanazir77/threatdetection/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/tahanazir77/threatdetection/discussions)
 
 ---
 
